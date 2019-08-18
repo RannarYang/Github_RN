@@ -3,6 +3,7 @@ import {
     createBottomTabNavigator,
     BottomTabBar
 } from 'react-navigation';
+import {connect} from 'react-redux';
 
 import PopularPage from '../page/PopularPage';
 import TrendingPage from '../page/TrendingPage';
@@ -70,19 +71,23 @@ const TABS = {
     }
   }
 }
-export default class DynamicTabNavigator extends Component {
+class DynamicTabNavigator extends Component {
   constructor(props) {
     super(props);
   }
   _tabNavigator() {
+    if(this.Tabs) {
+      return this.Tabs;
+    }
     const {PopularPage, TrendingPage, FavoritePage, MyPage} = TABS;
     const tabs = {PopularPage, TrendingPage, FavoritePage, MyPage} // 根据需要配置动态显示的tab
-    return createBottomTabNavigator(tabs, {
-      tabBarComponent: TabBarComponent
+    return this.Tabs = createBottomTabNavigator(tabs, {
+      tabBarComponent: props => {
+        return <TabBarComponent theme={this.props.theme} {...props}/>
+      }
     });
   }
   render() {
-    NavigationUtil.navigation = this.props.navigation;
     const Tab = this._tabNavigator();
     return <Tab/>
   }
@@ -99,31 +104,16 @@ class TabBarComponent extends React.Component {
   }
 
   render() {
-    const {routes, index} = this.props.navigation.state;
-    if(routes[index].params) {
-      const {theme} = routes[index].params;
-      // 以最新的更新时间为主，防止被其他tab之前的修改覆盖掉
-      if(theme && theme.updateTime > this.theme.updateTime) {
-        this.theme = theme;
-      } 
-    }
+    
     return <BottomTabBar
       {...this.props}
-      activeTintColor = {this.theme.tintColor || this.props.activeTintColor}
+      activeTintColor = {this.props.theme}
     />
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alighItems: 'center',
-    backgroundColor: '#F5FCFF'
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10
-  }
+const mapStateToProps = state => ({
+  theme: state.theme.theme,
 })
+
+export default connect(mapStateToProps)(DynamicTabNavigator)
