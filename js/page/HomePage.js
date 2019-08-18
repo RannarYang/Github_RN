@@ -1,32 +1,41 @@
 import React, {Component} from 'react';
-import {
-  createBottomTabNavigator,
-} from "react-navigation";
-
-import PopularPage from './PopularPage';
-import TrendingPage from './TrendingPage';
-import FavoritePage from './FavoritePage';
-import NavigationUtil from '../navigator/NavigationUtil';
+import { BackHandler } from 'react-native';
+import { NavigationActions } from 'react-navigation';
+import {connect} from 'react-redux';
 import DynamicTabNavigator from '../navigator/DynamicTabNavigator';
-export default class HomePage extends Component {
- 
-  render() {
-    NavigationUtil.navigation = this.props.navigation;
-    return <DynamicTabNavigator/>
-  }
-  
+import NavigatorUtil from '../navigator/NavigationUtil';
+
+class HomePage extends Component {
+    componentDidMount() {
+        BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener("hardwareBackPress", this.onBackPress);
+    }
+
+    /**
+     *处理Android中的物理返回键
+     * @memberof HomePage
+     */
+    onBackPress = ()=> {
+        const {dispatch, nav} = this.props;
+        if(nav.routes[1].index === 0) {
+            // 如果RootNavigator中的MainNavigator的index为0,则不处理返回
+            return false;
+        }
+        dispatch(NavigationActions.back());
+        return true;
+    }
+    
+    render() {
+        NavigatorUtil.navigation = this.props.navigation;
+        return <DynamicTabNavigator/>
+    }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alighItems: 'center',
-    backgroundColor: '#F5FCFF'
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10
-  }
+const mapStateToProps = state => ({
+    nav: state.nav
 })
+
+export default connect(mapStateToProps)(HomePage);
