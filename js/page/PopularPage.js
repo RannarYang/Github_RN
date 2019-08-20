@@ -3,6 +3,7 @@ import {
   createMaterialTopTabNavigator
 } from "react-navigation";
 import NavigationUtil from '../navigator/NavigationUtil';
+import { Button } from 'react-native';
 
 export default class PopularPage extends Component {
   constructor(props) {
@@ -56,6 +57,29 @@ class PopularTab extends Component {
             navigation: this.props.navigation
           }, "DetailPage")
         }}跳转到详情页</Text>
+        <Button  
+          title={"Fetch 使用"}
+          onPress={()=>{
+            NavigationUtil.goPage({
+              navigation: this.props.navigation
+          }, "FetchDemoPage")
+        }}/>
+
+        <Button  
+          title={"AsyncStorage 使用"}
+          onPress={()=>{
+            NavigationUtil.goPage({
+              navigation: this.props.navigation
+          }, "AsyncStorageDemoPage")
+        }}/>
+
+        <Button  
+          title={"离线缓存框架"}
+          onPress={()=>{
+            NavigationUtil.goPage({
+              navigation: this.props.navigation
+          }, "DataStoreDemoPage")
+        }}/>
       </View>
     ) 
   }

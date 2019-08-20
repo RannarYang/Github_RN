@@ -9,6 +9,9 @@ import DetailPage from '../page/DetailPage';
 
 import {connect} from 'react-redux';
 import {createReactNavigationReduxMiddleware, reduxifyNavigator} from 'react-navigation-redux-helpers';
+import FetchDemoPage from "../page/FetchDemoPage";
+import AsyncStorageDemoPage from '../page/AsyncStorageDemoPage';
+import DataStoreDemoPage from "../page/DataStorageDemoPage";
 
 export const rootCom = 'Init'; // 设置根路由
 
@@ -31,6 +34,21 @@ const MainNavigator = createStackNavigator({
     },
     DetailPage: {
         screen: DetailPage,
+        navigationOptions: {
+        }
+    },
+    FetchDemoPage: {
+        screen: FetchDemoPage,
+        navigationOptions: {
+        }
+    },
+    AsyncStorageDemoPage: {
+        screen: AsyncStorageDemoPage,
+        navigationOptions: {
+        }
+    },
+    DataStoreDemoPage: {
+        screen: DataStoreDemoPage,
         navigationOptions: {
         }
     }
