@@ -1,5 +1,6 @@
 import {combileReducers} from 'redux';
 import theme from './theme';
+import popular from './popular';
 import { rootCom, RootNavigator } from '../navigator/AppNavigator';
 
 //1.指定默认state
@@ -14,7 +15,8 @@ const navReducer = (state = navState, action) => {
 /**2、合并reducer */
 const index = combileReducers({
     nav: navReducer,
-    theme: theme
+    theme: theme,
+    popular: popular
 })
 
 export default index;
